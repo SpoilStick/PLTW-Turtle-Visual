@@ -1,0 +1,108 @@
+import turtle
+import math
+import random
+
+# Ask the user to input the number of branches
+branches = int(input("Enter the number of branches between 1 and 25:"))
+clouds = random.randint(0,10)
+branch_levels = math.ceil(math.log(branches,2))
+
+# Make sure the branches are between 1 and 25
+if branches < 1: 
+  print("Your number is too low")
+elif branches > 25:
+  print("Your number is too high")
+else:
+  # Create the list of leaf colors
+  leaf_color = ["chocolate","DarkGoldenrod","DarkOrange","gold","orange",
+                "tomato","forestgreen","lawngreen"]
+  
+  # Make sky background
+  bg=turtle.Screen()
+  bg.bgcolor("skyblue")
+  
+  # Making the Ground
+  painter = turtle.Turtle()
+  painter.hideturtle()
+  painter.penup()
+  painter.speed(0)
+  for i in range(150):
+    # Have the ground the same color as the leaves
+    painter.goto(random.uniform(-205,205),random.uniform(-205,-155))
+    painter.seth(random.uniform(0,360))
+    painter.fillcolor(leaf_color[i % 6])
+    painter.begin_fill()
+    painter.circle(random.uniform(15,25))
+    painter.end_fill()  
+  
+  # Making the clouds
+  cloud_color = ["silver","lightgray","snow","white"]
+  
+  for i in range(clouds):
+    cloud = turtle.Turtle()
+    cloud.hideturtle()
+    cloud.penup()
+    cloud.speed(0)
+    
+    # Have each cloud stay at the top and pick a random direction left or right
+    cloud.goto(random.uniform(-200,200),random.uniform(200,150))
+    direction = random.choice([0,180])
+      
+    for j in range(3):
+      # Have each cloud be made of 10 gray circles
+      cloud.fillcolor(random.choice(cloud_color))
+      cloud.begin_fill()
+      cloud.circle(random.uniform(25,35))
+      cloud.end_fill()
+      cloud.seth(direction)
+      cloud.right(random.uniform(-10,10))
+      cloud.forward(40)
+  
+  # Making the tree
+  for i in range(branches):
+    distance = 80
+    pen_size = 12
+    branch = turtle.Turtle()
+    branch.speed(2 * branches)
+    
+    branch.hideturtle()
+    branch.pencolor("brown")
+    branch.pensize(pen_size)
+    branch.seth(90)
+    branch.penup()
+    branch.goto(0,-150)
+    
+    # The base of the tree
+    branch.pendown()
+    branch.forward(100)
+    
+    # Make the branches random
+    pen_size -= 4
+    pen_size *= random.uniform(0.75,1)
+    distance *= random.uniform(0.75,1)
+    branch.right(random.uniform(-65,65))
+    
+    for level in range(branch_levels):
+      # Have each branch curve outwards
+      branch.right(random.uniform(-30,30))
+      
+      # Have each branch get smaller
+      pen_size /= 1.5 * random.uniform(1,1.1)
+      branch.pensize(pen_size)
+      
+      branch.pendown()
+      branch.forward(distance)
+      distance /= 1.5 * random.uniform(1,1.1)
+      branch.penup()
+      
+      if (random.uniform(0,branch_levels) < level + 1) and random.uniform(0,3) < 2:
+        # Create the leaves
+        # Have it turn right 90 degrees so that the leaf is straight
+        branch.right(90 + random.uniform(-15,15))
+      
+        branch.fillcolor(random.choice(leaf_color))
+        branch.begin_fill()
+        branch.circle(random.uniform(8 + pen_size,12 + pen_size))
+        branch.end_fill()
+        
+        branch.right(270 + random.uniform(-15,15))
